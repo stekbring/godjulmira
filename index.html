@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
+    <link rel="icon" type="image/png" href="julico.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>God Jul Älskling</title>
@@ -36,22 +37,19 @@
             class="w-full h-auto block select-none"
         >
 
-        <!-- FOTOVÄGG CONTAINER 
-             Ändrat: Tog bort 'overflow-hidden' så bilderna syns även om de hamnar nedanför bakgrundsbilden.
-        -->
+        <!-- FOTOVÄGG CONTAINER -->
         <div id="photo-wall" class="absolute inset-0 w-full h-full"></div>
     </div>
 
     <script>
         // --- INSTÄLLNINGAR ---
-        // Här ändrar du bilderna. 
-        // Tips: 'top' bestämmer hur långt ner bilden sitter. 
-        // Om du vill flytta en bild nedåt, öka siffran (t.ex. från "350px" till "400px").
+        // Nu kan du ändra 'header' för att byta rubriken på baksidan.
         const memories = [
             {
                 id: 1,
-                imgUrl: "bilder/bild1.jpg", 
-                text: "Vår första jul tillsammans.",
+                imgUrl: "bilder/bild4.jpg", 
+                header: "Mira", // Ändra rubriken här
+                text: "Jag älskar dig mer än ord kan beskriva.",
                 date: "Dec 2023",
                 rotation: 5,
                 top: "350px",  
@@ -60,7 +58,8 @@
             {
                 id: 2,
                 imgUrl: "bilder/bild2.jpg",
-                text: "Kommer du ihåg den här resan?",
+                header: "Puss",
+                text: "Du är den bästa som finns och jag är så tacksam för varje stund med dig.",
                 date: "Sommaren 2024",
                 rotation: 4,
                 top: "450px", 
@@ -69,7 +68,8 @@
             {
                 id: 3,
                 imgUrl: "bilder/bild3.jpg",
-                text: "Du lyser upp hela min värld.",
+                header: "Min Älskling",
+                text: "Du lyser upp hela min värld med ditt leende.",
                 date: "Alltid",
                 rotation: -6,
                 top: "570px",
@@ -77,7 +77,8 @@
             },
             {
                 id: 4,
-                imgUrl: "bilder/bild4.jpg",
+                imgUrl: "bilder/bild1.jpg",
+                header: "God Jul",
                 text: "God jul min älskling.",
                 date: "24 Dec 2025",
                 rotation: 4,
@@ -86,7 +87,8 @@
             },
             {
                 id: 5,
-                imgUrl: "bilder/bild4.jpg",
+                imgUrl: "bilder/bild5.jpg",
+                header: "Till Dig",
                 text: "God jul min älskling.",
                 date: "24 Dec 2025",
                 rotation: 3,
@@ -95,7 +97,8 @@
             },
             {
                 id: 6,
-                imgUrl: "bilder/bild4.jpg",
+                imgUrl: "bilder/bild6.jpg",
+                header: "Till Dig",
                 text: "God jul min älskling.",
                 date: "24 Dec 2025",
                 rotation: -2,
@@ -104,17 +107,18 @@
             },
             {
                 id: 7,
-                imgUrl: "bilder/bild4.jpg",
-                text: "God jul min älskling.",
+                imgUrl: "bilder/bild7.jpg",
+                header: "God Jul Älskling",
+                text: "Ett egenbyggt soffbord gjort till dina instruktioner. Säg bara hur du vill ha det så fixar jag det <3.",
                 date: "24 Dec 2025",
                 rotation: 5,
                 top: "1050px",
                 left: "10%"
             },
             {
-                // RÄTTAT: Var "10175px" (för långt ner), ändrat till "1175px"
                 id: 8,
-                imgUrl: "bilder/bild4.jpg",
+                imgUrl: "bilder/bild8.jpg",
+                header: "Till Dig",
                 text: "God jul min älskling.",
                 date: "24 Dec 2025",
                 rotation: -3,
@@ -122,9 +126,9 @@
                 left: "50%"
             },
             {
-                // RÄTTAT: Var "10300px", ändrat till "1300px"
                 id: 9,
-                imgUrl: "bilder/bild4.jpg",
+                imgUrl: "bilder/bild9.jpg",
+                header: "Till Dig",
                 text: "God jul min älskling.",
                 date: "24 Dec 2025",
                 rotation: 2,
@@ -132,9 +136,9 @@
                 left: "10%"
             },
             {
-                // RÄTTAT: Var "10425px", ändrat till "1425px"
                 id: 10,
-                imgUrl: "bilder/bild4.jpg",
+                imgUrl: "bilder/bild10.jpg",
+                header: "Till Dig",
                 text: "God jul min älskling.",
                 date: "24 Dec 2025",
                 rotation: -4,
@@ -152,21 +156,17 @@
             memories.forEach(memory => {
                 const cardWrapper = document.createElement('div');
                 cardWrapper.id = `card-${memory.id}`;
-                // Vi sparar rotationen för animationen
                 cardWrapper.dataset.rotation = memory.rotation;
                 
-                // Grundstilar
                 cardWrapper.className = `absolute cursor-pointer z-20 hover:z-30 hover:scale-105 perspective-1000`;
                 
-                // Positionering
                 cardWrapper.style.top = memory.top;
                 cardWrapper.style.left = memory.left;
                 cardWrapper.style.transform = `rotate(${memory.rotation}deg)`;
                 cardWrapper.style.width = '200px'; 
                 cardWrapper.style.maxWidth = '45vw';
-                cardWrapper.style.transformOrigin = 'center center'; // Viktigt för rotation
+                cardWrapper.style.transformOrigin = 'center center';
                 
-                // Mjukare hover-effekt
                 cardWrapper.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
 
                 cardWrapper.innerHTML = `
@@ -195,7 +195,8 @@
                              
                              <div class="p-4 flex flex-col h-full justify-between items-center w-full overflow-hidden">
                                 <div class="flex-1 flex flex-col justify-center overflow-y-auto w-full">
-                                    <h3 class="text-2xl mb-2 font-bold text-gray-900 font-times">Till Dig</h3>
+                                    <!-- HÄR ANVÄNDS NU DEN DYNAMISKA RUBRIKEN -->
+                                    <h3 class="text-2xl mb-2 font-bold text-gray-900 font-times">${memory.header}</h3>
                                     <p class="text-lg text-gray-800 leading-relaxed font-times italic">
                                         "${memory.text}"
                                     </p>
@@ -218,7 +219,6 @@
             lucide.createIcons();
         }
 
-        // Skapar en osynlig kopia för att hålla platsen
         function createPlaceholder(card) {
             const placeholder = card.cloneNode(true);
             placeholder.id = `placeholder-${card.id.replace('card-', '')}`;
@@ -237,13 +237,9 @@
             const inner = card.querySelector('.card-inner');
             const pin = card.querySelector('.pin');
 
-            // 1. Skapa platshållare
             const placeholder = createPlaceholder(card);
-
-            // 2. Läs av startposition
             const startRect = card.getBoundingClientRect();
 
-            // 3. Byt till FIXED positionering
             card.style.transition = 'none';
             card.style.position = 'fixed';
             card.style.top = startRect.top + 'px';
@@ -251,25 +247,21 @@
             card.style.width = startRect.width + 'px';
             card.style.margin = '0';
             card.style.zIndex = '1000';
-            // Behåll rotationen initialt för att undvika hopp
             card.style.transform = `rotate(${card.dataset.rotation}deg)`;
 
             pin.style.display = 'none';
 
-            // 4. Tvinga ommöblering
             void card.offsetWidth;
 
-            // 5. Animera till mitten
             card.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'; 
             
             requestAnimationFrame(() => {
                 card.style.top = '50%';
                 card.style.left = '50%';
-                card.style.transform = 'translate(-50%, -50%) rotate(0deg)'; // Nollställ rotation i mitten
+                card.style.transform = 'translate(-50%, -50%) rotate(0deg)'; 
                 card.style.width = '350px';
                 card.style.maxWidth = '90vw';
                 
-                // Flippa kortet
                 inner.style.transform = 'rotateY(180deg)';
                 inner.style.boxShadow = '0 25px 50px -12px rgba(0,0,0,0.5)';
             });
@@ -283,28 +275,22 @@
             const inner = card.querySelector('.card-inner');
             const pin = card.querySelector('.pin');
 
-            // 1. Flippa tillbaka
             inner.style.transform = 'rotateY(0deg)';
             inner.style.boxShadow = '2px 8px 20px rgba(0,0,0,0.25)';
 
-            // 2. Räkna ut var platshållaren är NU (i viewport)
             const destRect = placeholder.getBoundingClientRect();
 
-            // 3. Animera tillbaka
             card.style.transition = 'all 0.5s ease-in-out';
             card.style.top = destRect.top + 'px';
             card.style.left = destRect.left + 'px';
             card.style.width = '200px'; 
             card.style.maxWidth = '45vw';
-            // Rotera tillbaka till originalvinkel under flygningen
             card.style.transform = `rotate(${card.dataset.rotation}deg)`;
 
-            // 4. När animationen är klar, återställ DOM-strukturen
             setTimeout(() => {
                 card.style.transition = 'none';
                 card.style.position = 'absolute';
                 
-                // Använd värdena från placeholder för att hamna exakt rätt i dokumentflödet
                 card.style.top = placeholder.style.top;
                 card.style.left = placeholder.style.left;
                 card.style.width = placeholder.style.width;
@@ -315,7 +301,6 @@
                 placeholder.remove();
                 pin.style.display = 'block';
                 
-                // Återaktivera hover-effekter
                 setTimeout(() => {
                     card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
                 }, 50);
