@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Jul Älskling</title>
+    <!-- Tailwind CSS för styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ikoner från Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .font-times { font-family: 'Times New Roman', Times, serif; }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        .font-title { font-family: 'Dancing Script', cursive; }
+
+        /* Klass för det osynliga "spöket" som håller platsen */
+        .placeholder-card {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-900 overflow-x-hidden font-sans m-0 p-0">
+
+    <div class="relative w-full">
+        <!-- BAKGRUNDSBILD -->
+        <!-- Byt src till din egna bildfil -->
+        <img 
+            src="bakgrund3.png" 
+            alt="Bakgrundsvägg" 
+            class="w-full h-auto block select-none"
+        >
+
+        <!-- FOTOVÄGG CONTAINER -->
+        <div id="photo-wall" class="absolute inset-0 w-full h-full overflow-hidden"></div>
+    </div>
+
+    <script>
+        // --- INSTÄLLNINGAR ---
+        // Här kan du enkelt ställa in positionen.
+        // Tips: Använd "px" för 'top' om du vill placera den exakt på en hylla i bakgrundsbilden.
+        // Exempel: top: "350px"
+        const memories = [
+            {
+                id: 1,
+                imgUrl: "bilder/bild1.jpg", 
+                text: "Vår första jul tillsammans.",
+                date: "Dec 2023",
+                rotation: -3,
+                top: "350px",  // Placering i pixlar från toppen
+                left: "10%"    // Placering i % från vänsterkanten
+            },
+            {
+                id: 2,
+                imgUrl: "bilder/bild2.jpg",
+                text: "Kommer du ihåg den här resan?",
+                date: "Sommaren 2024",
+                rotation: 4,
+                top: "475px", 
+                left: "50%"
+            },
+            {
+                id: 3,
+                imgUrl: "bilder/bild3.jpg",
+                text: "Du lyser upp hela min värld.",
+                date: "Alltid",
+                rotation: -6,
+                top: "600px",
+                left: "10%"
+            },
+            {
+                id: 4,
+                imgUrl: "bilder/bild4.jpg",
+                text: "God jul min älskling.",
+                date: "24 Dec 2025",
+                rotation: 2,
+                top: "725px",
+                left: "45%"
+            },
+            {
+                id: 5,
+                imgUrl: "bilder/bild4.jpg",
+                text: "God jul min älskling.",
+                date: "24 Dec 2025",
+                rotation: 2,
+                top: "850px",
+                left: "10%"
+            }
+        ];
+
+        const wallContainer = document.getElementById('photo-wall');
+        let activeCardId = null;
+
+        function renderWall() {
+            wallContainer.innerHTML = ''; 
+
+            memories.forEach(memory => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.id = `card-${memory.id}`;
+                // Vi använder data-attribut för att minnas ursprungsläget
+                cardWrapper.dataset.rotation = memory.rotation;
+                
+                // Grundstilar
+                cardWrapper.className = `absolute cursor-pointer z-20 hover:z-30 hover:scale-105 perspective-1000`;
+                
+                // Positionering
+                cardWrapper.style.top = memory.top;
+                cardWrapper.style.left = memory.left;
+                cardWrapper.style.transform = `rotate(${memory.rotation}deg)`;
+                cardWrapper.style.width = '200px'; 
+                cardWrapper.style.maxWidth = '45vw';
+                
+                // Notera: transition är flyttad till JavaScript för att undvika konstiga hopp vid start
+                cardWrapper.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+
+                cardWrapper.innerHTML = `
+                    <div class="relative w-full shadow-xl bg-white transition-transform duration-700 transform-style-3d rounded-[2px] card-inner"
+                         style="box-shadow: 2px 8px 20px rgba(0,0,0,0.25);">
+                        
+                        <!-- KNAPPNÅL -->
+                        <div class="pin absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-4 h-4 rounded-full bg-red-600 shadow-sm border border-red-800">
+                            <div class="absolute top-1 left-1 w-1 h-1 bg-white/50 rounded-full"></div>
+                        </div>
+
+                        <!-- FRAMSIDA -->
+                        <div class="relative backface-hidden flex flex-col bg-white" style="padding: 8px 8px 25px 8px;">
+                            <div class="w-full bg-gray-100 overflow-hidden relative" style="aspect-ratio: 1/1;">
+                                <img src="${memory.imgUrl}" alt="Memory" class="w-full h-full object-cover block">
+                                <div class="absolute inset-0 bg-orange-100/10 mix-blend-multiply pointer-events-none"></div>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 h-[25px] flex items-center justify-center">
+                                <p class="text-black font-times text-base font-bold tracking-wide leading-none pt-1">${memory.date}</p>
+                            </div>
+                        </div>
+
+                        <!-- BAKSIDA -->
+                        <div class="absolute inset-0 backface-hidden bg-white flex flex-col items-center justify-center text-center rotate-y-180"
+                             style="background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px;">
+                             
+                             <div class="p-4 flex flex-col h-full justify-between items-center w-full overflow-hidden">
+                                <div class="flex-1 flex flex-col justify-center overflow-y-auto w-full">
+                                    <h3 class="text-2xl mb-2 font-bold text-gray-900 font-times">Till Dig</h3>
+                                    <p class="text-lg text-gray-800 leading-relaxed font-times italic">
+                                        "${memory.text}"
+                                    </p>
+                                </div>
+                                
+                                <button onclick="closeCard(event, ${memory.id})" 
+                                        class="mt-2 flex-shrink-0 flex items-center gap-2 px-5 py-2 bg-stone-800 text-white rounded-full hover:bg-stone-700 transition-colors shadow-lg active:scale-95 text-sm font-times">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                    <span>Häng tillbaka</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                cardWrapper.addEventListener('click', () => openCard(memory.id));
+                wallContainer.appendChild(cardWrapper);
+            });
+            
+            lucide.createIcons();
+        }
+
+        // Skapar en osynlig kopia för att hålla platsen på väggen
+        function createPlaceholder(card) {
+            const placeholder = card.cloneNode(true);
+            placeholder.id = `placeholder-${card.id.replace('card-', '')}`;
+            placeholder.classList.add('placeholder-card');
+            placeholder.classList.remove('cursor-pointer', 'hover:z-30', 'hover:scale-105');
+            // Ta bort onclick från placeholder så den inte stör
+            placeholder.onclick = null; 
+            
+            // Sätt in den precis innan originalkortet i DOMen
+            card.parentNode.insertBefore(placeholder, card);
+            return placeholder;
+        }
+
+        function openCard(id) {
+            if (activeCardId !== null) return;
+            activeCardId = id;
+
+            const card = document.getElementById(`card-${id}`);
+            const inner = card.querySelector('.card-inner');
+            const pin = card.querySelector('.pin');
+
+            // 1. Skapa platshållare så vi vet vart vi ska tillbaka
+            const placeholder = createPlaceholder(card);
+
+            // 2. Läs av startposition (var kortet är nu på skärmen)
+            const startRect = card.getBoundingClientRect();
+
+            // 3. Byt till FIXED positionering exakt där kortet är nu (utan transition först)
+            card.style.transition = 'none';
+            card.style.position = 'fixed';
+            card.style.top = startRect.top + 'px';
+            card.style.left = startRect.left + 'px';
+            card.style.width = startRect.width + 'px';
+            card.style.margin = '0';
+            card.style.zIndex = '1000';
+            // Behåll rotationen initialt
+            card.style.transform = `rotate(${card.dataset.rotation}deg)`;
+
+            // Dölj nålen
+            pin.style.display = 'none';
+
+            // 4. Tvinga webbläsaren att uppdatera (reflow) så den fattar att vi bytt position
+            void card.offsetWidth;
+
+            // 5. Slå på transition och animera till mitten
+            card.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'; // Studsig effekt
+            
+            requestAnimationFrame(() => {
+                card.style.top = '50%';
+                card.style.left = '50%';
+                card.style.transform = 'translate(-50%, -50%) rotate(0deg)'; // Nollställ rotation
+                card.style.width = '350px'; // Större bredd
+                card.style.maxWidth = '90vw';
+                
+                // Flippa kortet
+                inner.style.transform = 'rotateY(180deg)';
+                inner.style.boxShadow = '0 25px 50px -12px rgba(0,0,0,0.5)';
+            });
+        }
+
+        window.closeCard = function(e, id) {
+            e.stopPropagation();
+            
+            const card = document.getElementById(`card-${id}`);
+            const placeholder = document.getElementById(`placeholder-${id}`);
+            const inner = card.querySelector('.card-inner');
+            const pin = card.querySelector('.pin');
+
+            // 1. Flippa tillbaka först
+            inner.style.transform = 'rotateY(0deg)';
+            inner.style.boxShadow = '2px 8px 20px rgba(0,0,0,0.25)';
+
+            // 2. Räkna ut var platshållaren befinner sig NU (ifall man scrollat)
+            const destRect = placeholder.getBoundingClientRect();
+
+            // 3. Animera tillbaka till platshållarens position
+            card.style.transition = 'all 0.5s ease-in-out';
+            card.style.top = destRect.top + 'px';
+            card.style.left = destRect.left + 'px';
+            card.style.width = '200px'; // Tillbaka till originalbredd
+            card.style.maxWidth = '45vw';
+            card.style.transform = `rotate(${card.dataset.rotation}deg)`; // Tillbaka till rotation
+
+            // 4. När animationen är klar: återställ till vanlig layout
+            setTimeout(() => {
+                // Ta bort inline styles som sattes av animationen för att återgå till CSS/memories värden
+                card.style.transition = 'none';
+                card.style.position = 'absolute';
+                
+                // Hämta originalvärdena från placeholder/memories
+                card.style.top = placeholder.style.top;
+                card.style.left = placeholder.style.left;
+                card.style.width = placeholder.style.width;
+                card.style.maxWidth = placeholder.style.maxWidth;
+                card.style.transform = placeholder.style.transform;
+                card.style.zIndex = '20';
+                
+                // Ta bort platshållaren
+                placeholder.remove();
+                
+                // Visa nålen
+                pin.style.display = 'block';
+                
+                // Återställ hover-effekter
+                setTimeout(() => {
+                    card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+                }, 50);
+
+                activeCardId = null;
+            }, 500); // Matcha transition-tiden
+        };
+
+        renderWall();
+    </script>
+</body>
+</html>
